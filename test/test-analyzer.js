@@ -16,57 +16,66 @@
 const fs = require('fs');
 const path = require('path');
 
-// Mock window and browser environment
-const window = {
-    KEYBOARD_PATTERNS: [
-        "abcdefghijklmnopqrstuvwxyz",
-        "01234567890",
-        "qwertyuiop",
-        "asdfghjkl",
-        "zxcvbnm"
-    ]
-};
+const window = {};
+eval(fs.readFileSync(path.join(__dirname, '../js/common-passwords.js'), 'utf8'));
 
-// Load common passwords list
-const commonPasswordsFile = fs.readFileSync(
-    path.join(__dirname, '../js/common-passwords.js'),
-    'utf8'
-);
-eval(commonPasswordsFile);
-
-// Load core analysis logic
-const SPECIAL_CHARS_REGEX = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/;
-const REPEATED_CHARS_REGEX = /(.)\1{2,}/i;
+const SPECIAL_CHARS_REGEX = /[^a-zA-Z0-9]/;
 
 function detectSequentialPattern(pwd) {
+    if (!pwd || pwd.length < 3) return false;
     const lower = pwd.toLowerCase();
-    if (lower.length < 3) return false;
-
     const patterns = window.KEYBOARD_PATTERNS;
+
     for (const pattern of patterns) {
         for (let i = 0; i <= pattern.length - 3; i++) {
             const sub = pattern.slice(i, i + 3);
             const revSub = sub.split("").reverse().join("");
-            if (lower.includes(sub) || lower.includes(revSub)) {
-                return true;
-            }
+            if (lower.includes(sub) || lower.includes(revSub)) return true;
         }
     }
+    for (let i = 0; i < lower.length - 2; i++) {
+        const c1 = lower.charCodeAt(i);
+        const c2 = lower.charCodeAt(i + 1);
+        const c3 = lower.charCodeAt(i + 2);
+        if (c2 === c1 + 1 && c3 === c2 + 1) return true;
+        if (c2 === c1 - 1 && c3 === c2 - 1) return true;
+    }
     return false;
+}
+
+function detectRepeatedPattern(pwd) {
+    if (!pwd || pwd.length < 3) return false;
+    if (/(.)\1{2,}/i.test(pwd)) return true;
+    if (/(..+)\1{2,}/i.test(pwd)) return true;
+    return false;
+}
+
+function normalizeLeetspeak(str) {
+    return str.toLowerCase()
+        .replace(/[@4]/g, "a")
+        .replace(/[3]/g, "e")
+        .replace(/[1!|]/g, "i")
+        .replace(/[0]/g, "o")
+        .replace(/[\$5]/g, "s")
+        .replace(/[7]/g, "t");
 }
 
 function isCommonPassword(pwd) {
     if (!pwd) return false;
     const normalized = pwd.trim().toLowerCase();
     const commonList = window.COMMON_PASSWORDS || [];
+    const rootWords = window.COMMON_ROOT_WORDS || [];
 
     if (commonList.includes(normalized)) return true;
+    const leetNormalized = normalizeLeetspeak(normalized);
+    if (commonList.includes(leetNormalized)) return true;
 
-    if (normalized.length <= 10) {
-        const highRiskKeywords = ["password", "123456", "admin", "qwerty", "welcome", "iloveyou"];
-        for (const word of highRiskKeywords) {
-            if (normalized.includes(word)) return true;
+    if (normalized.length <= 16) {
+        for (const root of rootWords) {
+            if (normalized.includes(root) || leetNormalized.includes(root)) return true;
         }
+        const strippedCore = normalized.replace(/^[^a-z]+|[^a-z]+$/g, "");
+        if (strippedCore.length >= 4 && rootWords.includes(strippedCore)) return true;
     }
     return false;
 }
@@ -94,15 +103,15 @@ function computeScore(pwd, criteria) {
     const len = pwd.length;
 
     if (len < 6) {
-        score += len * 3;
+        score += len * 2;
     } else if (len < 8) {
-        score += 15 + (len - 5) * 4;
+        score += 10 + (len - 5) * 3;
     } else if (len < 12) {
-        score += 25 + (len - 8) * 3;
+        score += 18 + (len - 8) * 3;
     } else if (len < 16) {
-        score += 35 + (len - 12) * 2;
+        score += 28 + (len - 12) * 3;
     } else {
-        score += 45;
+        score += 40;
     }
 
     if (criteria.hasLower) score += 10;
@@ -111,10 +120,9 @@ function computeScore(pwd, criteria) {
     if (criteria.hasSpecial) score += 15;
 
     if (criteria.hasLower && criteria.hasUpper && criteria.hasNumber && criteria.hasSpecial) {
-        score += 10;
+        score += 5;
     }
-
-    if (len >= 14 && criteria.hasNumber && criteria.hasSpecial) {
+    if (len >= 16 && criteria.hasLower && criteria.hasUpper && criteria.hasNumber && criteria.hasSpecial) {
         score += 10;
     }
 
@@ -127,23 +135,25 @@ function computeScore(pwd, criteria) {
         score -= 25;
     }
 
-    if (len < 8) score = Math.min(score, 30);
+    if (len < 6) score = Math.min(score, 15);
+    else if (len < 8) score = Math.min(score, 25);
     if (criteria.isCommon) score = Math.min(score, 15);
 
     return Math.max(0, Math.min(100, Math.round(score)));
 }
 
-function getStrengthTier(score, criteria) {
+function getStrengthTier(score, criteria, isEmpty) {
+    if (isEmpty) return "Awaiting Input";
     if (criteria.isCommon) return "Very Weak (Compromised)";
-    if (score === 0) return "Awaiting Input";
-    if (score < 30) return "Very Weak";
-    if (score < 55) return "Weak";
-    if (score < 75) return "Medium";
-    if (score < 90) return "Strong";
+    if (score <= 25) return "Very Weak";
+    if (score <= 50) return "Weak";
+    if (score <= 74) return "Medium";
+    if (score <= 89) return "Strong";
     return "Very Strong";
 }
 
 function analyze(pwd) {
+    const isEmpty = (!pwd || pwd.length === 0);
     const criteria = {
         isLengthValid: pwd.length >= 8,
         hasUpper: /[A-Z]/.test(pwd),
@@ -151,12 +161,12 @@ function analyze(pwd) {
         hasNumber: /[0-9]/.test(pwd),
         hasSpecial: SPECIAL_CHARS_REGEX.test(pwd),
         isCommon: isCommonPassword(pwd),
-        hasRepeated: REPEATED_CHARS_REGEX.test(pwd),
+        hasRepeated: detectRepeatedPattern(pwd),
         hasSequential: detectSequentialPattern(pwd)
     };
     const score = computeScore(pwd, criteria);
     const entropy = calculateEntropy(pwd, criteria);
-    const tier = getStrengthTier(score, criteria);
+    const tier = getStrengthTier(score, criteria, isEmpty);
     return { criteria, score, entropy, tier };
 }
 
@@ -183,9 +193,9 @@ const testCases = [
         input: "cat",
         validate: (res) => {
             if (res.criteria.isLengthValid !== false) throw new Error("Length criteria should be false");
-            if (res.score > 30) throw new Error(`Score should be capped <= 30 for short password, got ${res.score}`);
+            if (res.score > 25) throw new Error(`Score should be capped <= 25 for short password, got ${res.score}`);
             if (res.tier !== "Very Weak") throw new Error(`Expected tier 'Very Weak', got ${res.tier}`);
-            return `Passed: Identified as short (${res.inputLength || 3} chars), tier: ${res.tier}, score: ${res.score}`;
+            return `Passed: Identified as short (3 chars), tier: ${res.tier}, score: ${res.score}`;
         }
     },
     {
@@ -195,7 +205,7 @@ const testCases = [
             if (!res.criteria.hasLower) throw new Error("Lowercase should be true");
             if (res.criteria.hasUpper) throw new Error("Uppercase should be false");
             if (res.criteria.hasNumber) throw new Error("Number should be false");
-            if (res.criteria.hasSpecial) throw new Error("Special should be false");
+            if (res.tier !== "Weak") throw new Error(`Expected tier 'Weak', got ${res.tier}`);
             return `Passed: Verified lowercase-only constraint, penalized single-pool keyspace. Score: ${res.score}, Tier: ${res.tier}`;
         }
     },
@@ -217,7 +227,7 @@ const testCases = [
             if (!res.criteria.hasUpper || !res.criteria.hasLower || !res.criteria.hasNumber || !res.criteria.hasSpecial) {
                 throw new Error("All 4 character classes should be satisfied!");
             }
-            if (res.score < 80) throw new Error(`Expected robust score >= 80, got ${res.score}`);
+            if (res.score < 85) throw new Error(`Expected robust score >= 85, got ${res.score}`);
             return `Passed: Full character diversity satisfied. Score: ${res.score}, Tier: ${res.tier}, Entropy: ${res.entropy} bits`;
         }
     },
@@ -234,7 +244,7 @@ const testCases = [
 ];
 
 let passedCount = 0;
-testCases.forEach((tc, idx) => {
+testCases.forEach((tc) => {
     try {
         const result = analyze(tc.input);
         const feedback = tc.validate(result);
@@ -258,4 +268,3 @@ if (passedCount === testCases.length) {
 } else {
     process.exit(1);
 }
-

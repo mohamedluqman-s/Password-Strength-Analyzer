@@ -2,14 +2,13 @@
 // Password Strength Analyzer - Common & Compromised Passwords Database
 // Thiranex Cyber Security Internship Project
 // ============================================================================
-// This database contains the most frequently used, cracked, and breached
-// passwords worldwide (sourced from common wordlists like RockYou, SecLists,
-// and annual threat intelligence reports).
-// All matching is performed strictly offline in the client's browser.
+// This database contains the most frequently breached, leaked, and easily guessed
+// credentials worldwide (compiled from SecLists, RockYou, and cybersecurity reports).
+// Evaluated strictly offline inside the client's local browser memory.
 // ============================================================================
 
 const COMMON_PASSWORDS = [
-    // Top 10 most common global passwords
+    // Top Most Common Global Passwords
     "123456",
     "password",
     "123456789",
@@ -20,8 +19,40 @@ const COMMON_PASSWORDS = [
     "123123",
     "qwerty",
     "admin",
+    "admin123",
+    "admin@123",
+    "admin1",
+    "administrator",
+    "root",
+    "toor",
+    "guest",
+    "welcome",
+    "welcome1",
+    "welcome123",
+    "welcome@123",
+    "login",
+    "pass1234",
+    "password1",
+    "password12",
+    "password123",
+    "password1234",
+    "password12345",
+    "passcode",
+    "changeme",
+    "secret",
+    "default",
+    "master",
+    "master123",
+    "testing",
+    "test1234",
+    "test@123",
+    "access",
+    "oracle",
+    "service",
+    "support",
+    "operator",
 
-    // Common numeric sequences & pins
+    // Common Numeric Sequences & PINs
     "000000",
     "666666",
     "123321",
@@ -41,35 +72,18 @@ const COMMON_PASSWORDS = [
     "222222",
     "102030",
     "12344321",
+    "1111111",
+    "00000000",
+    "123123123",
 
-    // Common words and dictionary entries
-    "welcome",
-    "login",
-    "guest",
-    "pass1234",
-    "password123",
-    "password1",
-    "passcode",
-    "changeme",
-    "secret",
-    "default",
-    "master",
-    "testing",
-    "test1234",
-    "access",
-    "oracle",
-    "root",
-    "toor",
-    "service",
-    "support",
-    "operator",
-    "administrator",
-
-    // Popular phrases, cultural & personal words
+    // Common Words, Cultural & Pop Culture Phrases
     "iloveyou",
+    "iloveyou123",
     "princess",
     "sunshine",
+    "sunshine1",
     "dragon",
+    "dragon1",
     "football",
     "baseball",
     "basketball",
@@ -82,6 +96,8 @@ const COMMON_PASSWORDS = [
     "killer",
     "trustno1",
     "letmein",
+    "letmein1",
+    "letmein123",
     "freedom",
     "mustang",
     "jordan",
@@ -104,8 +120,13 @@ const COMMON_PASSWORDS = [
     "computer",
     "system",
     "server",
+    "network",
+    "security",
+    "cybersecurity",
+    "hacker",
+    "database",
 
-    // Keyboard walk patterns
+    // Keyboard Walk Patterns
     "qwertyuiop",
     "asdfghjkl",
     "zxcvbnm",
@@ -117,17 +138,55 @@ const COMMON_PASSWORDS = [
     "qwertz",
     "azerty",
     "qweasdzxc",
+    "123qwe",
+    "qwe123",
+    "asdf1234",
+    "zxcv1234",
 
-    // Leetspeak variants of common words
+    // Leetspeak & Symbol Variants of Common Passwords
     "p@ssw0rd",
     "p@ssword",
     "passw0rd",
     "p@55w0rd",
+    "p@ssw0rd123",
+    "p@ssword123",
+    "p@ssw0rd1",
     "adm1n",
+    "adm!n",
     "w3lc0me",
+    "w3lc0m3",
     "s3cr3t",
     "l0v3y0u",
-    "qw3rty"
+    "qw3rty",
+    "pass@123",
+    "pass@word",
+    "p@ss1234"
+];
+
+// High-risk root words for substring and suffix matching
+const COMMON_ROOT_WORDS = [
+    "password",
+    "123456",
+    "admin",
+    "qwerty",
+    "welcome",
+    "iloveyou",
+    "letmein",
+    "dragon",
+    "monkey",
+    "master",
+    "princess",
+    "sunshine",
+    "superman",
+    "batman",
+    "starwars",
+    "default",
+    "testing",
+    "secret",
+    "passcode",
+    "login",
+    "root",
+    "toor"
 ];
 
 // Common sequential alphabet and number sequences for pattern detection
@@ -142,6 +201,6 @@ const KEYBOARD_PATTERNS = [
 // Export to window global for client-side zero-dependency script usage
 if (typeof window !== "undefined") {
     window.COMMON_PASSWORDS = COMMON_PASSWORDS;
+    window.COMMON_ROOT_WORDS = COMMON_ROOT_WORDS;
     window.KEYBOARD_PATTERNS = KEYBOARD_PATTERNS;
 }
-
