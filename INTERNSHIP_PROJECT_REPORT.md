@@ -158,3 +158,4 @@ The **Password Strength Analyzer** provides a robust, scientifically backed, and
 2. **OWASP Foundation:** *Authentication Cheat Sheet & Password Storage Cheat Sheet*.
 3. **CISA:** *Cyber Hygiene Services & Credential Protection Best Practices*. Cybersecurity and Infrastructure Security Agency.
 4. **Shannon, C. E. (1948):** *A Mathematical Theory of Communication*. Bell System Technical Journal.
+
