@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CyberShield Password Strength Analyzer 🛡️
 
 > **An Enterprise-Grade, Zero-Knowledge Credential Security Audit & Entropy Evaluation Suite**  
@@ -213,3 +214,7 @@ The application includes two automated test suites built for Node.js:
 - **Project Name:** CyberShield Password Strength Analyzer  
 - **Internship:** Thiranex Cyber Security Internship  
 - **Author:** Mohamed Luqman  
+=======
+# Password-Strength-Analyzer
+CyberShield Password Strength Analyzer - Thiranex Cyber Security Internship Project
+>>>>>>> 0ee94f7f70f6afb0321e71bdba8e2fe722c039b4
