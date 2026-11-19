@@ -789,6 +789,52 @@ a:hover {
     word-break: break-word;
 }
 
+/* Attack Scenarios Matrix */
+.attack-matrix-wrap {
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+}
+
+.attack-matrix-header {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.attack-matrix-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.attack-scenario-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(11, 19, 43, 0.6);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+}
+
+.attack-name {
+    color: var(--text-secondary);
+}
+
+.attack-time {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--cyan-primary);
+    font-size: 0.8rem;
+}
+
 /* ==========================================================================
    CHECKLIST & SUGGESTIONS SECTION
    ========================================================================== */

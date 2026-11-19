@@ -159,7 +159,7 @@
                             </div>
                         </div>
 
-                        <!-- Input Toolbar: Analyze & Reset -->
+                        <!-- Input Toolbar: Analyze, Export Report & Reset -->
                         <div class="input-button-toolbar">
                             <button type="button" class="btn btn-primary" id="analyzeBtn">
                                 <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -167,6 +167,15 @@
                                     <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                                 </svg>
                                 Analyze Password
+                            </button>
+
+                            <button type="button" class="btn btn-outline" id="exportReportBtn" title="Download sanitized security report">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Export Report
                             </button>
 
                             <button type="button" class="btn btn-secondary" id="resetBtn">
@@ -249,6 +258,25 @@
                             <div class="metric-box">
                                 <div class="metric-label">Est. Crack Time (10 GH/s)</div>
                                 <div class="metric-value" id="crackTimeValue">0 seconds</div>
+                            </div>
+                        </div>
+
+                        <!-- Comparative Attack Scenarios Matrix -->
+                        <div class="attack-matrix-wrap">
+                            <div class="attack-matrix-header">Brute-Force Attack Vectors:</div>
+                            <div class="attack-matrix-list">
+                                <div class="attack-scenario-item">
+                                    <span class="attack-name">Web App (100/s):</span>
+                                    <span class="attack-time" id="timeOnline">0s</span>
+                                </div>
+                                <div class="attack-scenario-item">
+                                    <span class="attack-name">PC CPU (50k/s):</span>
+                                    <span class="attack-time" id="timeCpu">0s</span>
+                                </div>
+                                <div class="attack-scenario-item">
+                                    <span class="attack-name">GPU Rig (10 GH/s):</span>
+                                    <span class="attack-time" id="timeGpu">0s</span>
+                                </div>
                             </div>
                         </div>
                     </div>

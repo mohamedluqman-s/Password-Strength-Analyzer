@@ -28,6 +28,7 @@
     const toggleVisibilityBtn = document.getElementById("toggleVisibilityBtn");
     const toggleIcon = document.getElementById("toggleIcon");
     const analyzeBtn = document.getElementById("analyzeBtn");
+    const exportReportBtn = document.getElementById("exportReportBtn");
     const clearBtn = document.getElementById("clearBtn");
     const resetBtn = document.getElementById("resetBtn");
 
@@ -39,6 +40,9 @@
     const entropyValue = document.getElementById("entropyValue");
     const crackTimeValue = document.getElementById("crackTimeValue");
     const charCountValue = document.getElementById("charCountValue");
+    const timeOnline = document.getElementById("timeOnline");
+    const timeCpu = document.getElementById("timeCpu");
+    const timeGpu = document.getElementById("timeGpu");
 
     // Checklist Elements
     const checkLength = document.getElementById("check-length");
@@ -212,6 +216,41 @@
         if (seconds < 31536000 * 100) return `${Math.round(seconds / 31536000)} years`;
         if (seconds < 31536000 * 10000) return `${Math.round(seconds / (31536000 * 100))} centuries`;
         return "Millions of years";
+    }
+
+    /**
+     * Formats seconds into compact human-readable string for attack vectors
+     */
+    function formatSecondsCompact(seconds, isBreached) {
+        if (isBreached) return "< 1ms";
+        if (seconds <= 0) return "0s";
+        if (seconds < 0.001) return "< 1ms";
+        if (seconds < 1) return "< 1s";
+        if (seconds < 60) return `${Math.round(seconds)}s`;
+        if (seconds < 3600) return `${Math.round(seconds / 60)}m`;
+        if (seconds < 86400) return `${Math.round(seconds / 3600)}h`;
+        if (seconds < 31536000) return `${Math.round(seconds / 86400)}d`;
+        if (seconds < 31536000 * 100) return `${Math.round(seconds / 31536000)}y`;
+        if (seconds < 31536000 * 10000) return `${Math.round(seconds / (31536000 * 100))} cent.`;
+        return "> 1M yrs";
+    }
+
+    /**
+     * Calculates comparative times across different adversary attack environments
+     */
+    function calculateAttackTimes(entropy, isBreached) {
+        if (isBreached) {
+            return { online: "< 1ms", cpu: "< 1ms", gpu: "< 1ms" };
+        }
+        if (entropy === 0) {
+            return { online: "0s", cpu: "0s", gpu: "0s" };
+        }
+        const attempts = Math.pow(2, entropy - 1);
+        return {
+            online: formatSecondsCompact(attempts / 100, false),
+            cpu: formatSecondsCompact(attempts / 50000, false),
+            gpu: formatSecondsCompact(attempts / 1e10, false)
+        };
     }
 
     /**
@@ -485,6 +524,7 @@
         const score = computeScore(pwd, criteria);
         const entropy = calculateEntropy(pwd, criteria);
         const crackTime = estimateCrackingTime(entropy, criteria.isCommon);
+        const attackTimes = calculateAttackTimes(entropy, criteria.isCommon);
         const tier = getStrengthTier(score, criteria);
         const suggestions = generateSuggestions(pwd, criteria, score);
 
@@ -504,6 +544,9 @@
         // Update Metric Counters
         if (entropyValue) entropyValue.textContent = `${entropy} bits`;
         if (crackTimeValue) crackTimeValue.textContent = crackTime;
+        if (timeOnline) timeOnline.textContent = attackTimes.online;
+        if (timeCpu) timeCpu.textContent = attackTimes.cpu;
+        if (timeGpu) timeGpu.textContent = attackTimes.gpu;
 
         // Update Score Gauge
         updateScoreGauge(score, tier.color);
@@ -585,6 +628,9 @@
         }
         if (entropyValue) entropyValue.textContent = "0 bits";
         if (crackTimeValue) crackTimeValue.textContent = "0 seconds";
+        if (timeOnline) timeOnline.textContent = "0s";
+        if (timeCpu) timeCpu.textContent = "0s";
+        if (timeGpu) timeGpu.textContent = "0s";
 
         updateScoreGauge(0, "#64748b");
 
@@ -789,6 +835,92 @@
                 }
                 renderEmptyState();
                 showToast("Analyzer reset to initial state.");
+            });
+        }
+
+        // Export Sanitized Security Audit Report (Zero-Knowledge)
+        if (exportReportBtn) {
+            exportReportBtn.addEventListener("click", () => {
+                const pwd = passwordInput ? passwordInput.value : "";
+                if (!pwd) {
+                    showToast("Please enter or generate a password to export audit report.");
+                    return;
+                }
+
+                const criteria = {
+                    isLengthValid: pwd.length >= 8,
+                    hasUpper: /[A-Z]/.test(pwd),
+                    hasLower: /[a-z]/.test(pwd),
+                    hasNumber: /[0-9]/.test(pwd),
+                    hasSpecial: SPECIAL_CHARS_REGEX.test(pwd),
+                    isCommon: isCommonPassword(pwd),
+                    hasRepeated: REPEATED_CHARS_REGEX.test(pwd),
+                    hasSequential: detectSequentialPattern(pwd)
+                };
+
+                const score = computeScore(pwd, criteria);
+                const entropy = calculateEntropy(pwd, criteria);
+                const tier = getStrengthTier(score, criteria);
+                const crackTime = estimateCrackingTime(entropy, criteria.isCommon);
+                const attackTimes = calculateAttackTimes(entropy, criteria.isCommon);
+                const suggestions = generateSuggestions(pwd, criteria, score);
+
+                // Zero-knowledge mask: never write cleartext password into the report file!
+                const masked = pwd.length > 2
+                    ? pwd[0] + "*".repeat(pwd.length - 2) + pwd[pwd.length - 1]
+                    : "*".repeat(pwd.length);
+
+                const timestamp = new Date().toISOString().replace("T", " ").substring(0, 19);
+
+                const reportLines = [
+                    "================================================================================",
+                    "                       PASSWORD SECURITY AUDIT REPORT",
+                    "                  Thiranex Cyber Security Internship Project",
+                    "================================================================================",
+                    `Audit Timestamp         : ${timestamp} UTC`,
+                    `Audit Mode              : Zero-Knowledge Client-Side Heuristic Evaluation`,
+                    `Credential Length       : ${pwd.length} characters`,
+                    `Masked Credential       : ${masked} (Sanitized to prevent cleartext exposure)`,
+                    "--------------------------------------------------------------------------------",
+                    "SECURITY EVALUATION POSTURE:",
+                    `  * Security Score      : ${score} / 100 Points`,
+                    `  * Strength Tier       : ${tier.label.toUpperCase()}`,
+                    `  * Shannon Entropy     : ${entropy} bits`,
+                    `  * Primary Crack Time  : ${crackTime}`,
+                    "--------------------------------------------------------------------------------",
+                    "BRUTE-FORCE ATTACK SCENARIOS MATRIX:",
+                    `  * Web Application (100 guesses/sec)       : ${attackTimes.online}`,
+                    `  * Desktop CPU (50,000 guesses/sec)        : ${attackTimes.cpu}`,
+                    `  * GPU Cluster Rig (10,000,000,000/sec)    : ${attackTimes.gpu}`,
+                    "--------------------------------------------------------------------------------",
+                    "SECURITY CRITERIA BREAKDOWN:",
+                    `  [${criteria.isLengthValid ? "PASS" : "FAIL"}] Minimum 8 Characters (Length: ${pwd.length})`,
+                    `  [${criteria.hasUpper ? "PASS" : "FAIL"}] Uppercase Letters (A-Z)`,
+                    `  [${criteria.hasLower ? "PASS" : "FAIL"}] Lowercase Letters (a-z)`,
+                    `  [${criteria.hasNumber ? "PASS" : "FAIL"}] Numeric Digits (0-9)`,
+                    `  [${criteria.hasSpecial ? "PASS" : "FAIL"}] Special Symbols (!@#$%... )`,
+                    `  [${!criteria.isCommon ? "PASS" : "FAIL"}] Breached Wordlist Immunity (SecLists check)`,
+                    `  [${!criteria.hasRepeated && !criteria.hasSequential ? "PASS" : "FAIL"}] Predictable Sequence & Walk Check`,
+                    "--------------------------------------------------------------------------------",
+                    "ACTIONABLE REMEDIATION RECOMMENDATIONS:",
+                    ...suggestions.map(s => `  * ${s}`),
+                    "================================================================================",
+                    "Project Attribution : Thiranex Cyber Security Internship",
+                    "Privacy Guarantee   : This audit ran locally in-browser. Zero network transmission.",
+                    "================================================================================"
+                ];
+
+                const blob = new Blob([reportLines.join("\r\n")], { type: "text/plain;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `Security_Audit_Report_${Date.now()}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showToast("Security Audit Report downloaded successfully!");
             });
         }
     }
