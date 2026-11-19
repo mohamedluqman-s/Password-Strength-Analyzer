@@ -1,95 +1,103 @@
-# Password Strength Analyzer 🛡️
+# CyberShield Password Strength Analyzer 🛡️
 
-> **A professional, zero-knowledge cybersecurity web application designed to evaluate password resilience, Shannon entropy, and brute-force cracking resistance.**  
+> **An Enterprise-Grade, Zero-Knowledge Credential Security Audit & Entropy Evaluation Suite**  
 > *Developed for the **Thiranex Cyber Security Internship**.*
 
 ---
 
 ## 📋 Table of Contents
-1. [Project Overview](#-project-overview)
-2. [Key Features](#-key-features)
-3. [Zero-Knowledge Privacy Architecture](#-zero-knowledge-privacy-architecture)
-4. [Cybersecurity Methodology & Formulas](#-cybersecurity-methodology--formulas)
+1. [Project Introduction](#-project-introduction)
+2. [Project Objectives](#-project-objectives)
+3. [Technologies Used](#-technologies-used)
+4. [Features and Functionalities](#-features-and-functionalities)
 5. [Project Folder Structure](#-project-folder-structure)
-6. [How to Run Locally](#-how-to-run-locally)
-   - [Method 1: Direct in Browser (Zero Setup)](#method-1-direct-in-browser-zero-setup)
+6. [Installation and Execution Instructions](#-installation-and-execution-instructions)
+   - [Method 1: Direct Web Browser Execution (Zero Setup)](#method-1-direct-web-browser-execution-zero-setup)
    - [Method 2: Python Standard Library Server](#method-2-python-standard-library-server)
-   - [Method 3: Python Flask Server (With OWASP Security Headers)](#method-3-python-flask-server)
-7. [Automated Testing & Verification](#-automated-testing--verification)
-8. [Technologies Used](#-technologies-used)
-9. [Internship Project Attribution](#-internship-project-attribution)
+   - [Method 3: Python Flask Server (With OWASP Security Headers)](#method-3-python-flask-server-with-owasp-security-headers)
+7. [Automated Verification & Testing](#-automated-verification--testing)
+8. [Cybersecurity References & Compliance](#-cybersecurity-references--compliance)
 
 ---
 
-## 🌟 Project Overview
+## 🌟 Project Introduction
 
-In contemporary cybersecurity, weak or compromised credentials account for over **80% of data breaches and account takeover (ATO) attacks**. The **Password Strength Analyzer** was engineered to provide users with an educational, real-time, and privacy-preserving platform to audit passwords against enterprise-grade defensive standards (NIST SP 800-63B, OWASP, and CISA).
+In contemporary information security, compromised, weak, and predictable passwords represent the primary initial attack vector in more than **80% of data breaches and automated credential-stuffing campaigns** (Verizon DBIR, OWASP Top 10). Traditional client-side password strength checkers often mislead users by merely checking character length or enforcing basic character classes without assessing mathematical keyspace density, keyboard walk sequences, or breached wordlist prevalence.
 
-Unlike simplistic checkers that merely count character length, this tool computes **mathematical information entropy**, evaluates character diversity, analyzes dictionary matches against known breached wordlists (SecLists / RockYou), detects keyboard walk patterns, and projects real-world cracking timelines against modern high-performance GPU clusters.
-
----
-
-## ⚡ Key Features
-
-- **Cybersecurity Dark Theme:** High-tech dark navy background (`#070b14`) accented with electric cyan (`#00f2fe`) and neon blue (`#38bdf8`), subtle grid lines, and glassmorphism cards.
-- **Dynamic Real-Time Strength Meter:** Continuously updates strength tiers (`Very Weak`, `Weak`, `Medium`, `Strong`, `Very Strong`) with animated glowing color transitions.
-- **Visual Circular Score Gauge:** 0 to 100 numerical score display with an animated SVG radial progress ring.
-- **Interactive Security Checklist:** Dynamic indicators with green checkmarks (`✔`) and red crosses (`✖`) for:
-  - Minimum 8 characters (12+ recommended).
-  - Uppercase letters (`A-Z`).
-  - Lowercase letters (`a-z`).
-  - Numeric digits (`0-9`).
-  - Special symbols (`!@#$%^&*...`).
-  - Breached/common dictionary check.
-  - Predictable keyboard sequence and repeated character detection.
-- **Dynamic Improvement Recommendations:** Context-aware suggestions identifying missing criteria, keyboard walk sequences, and critical dictionary warnings.
-- **Shannon Entropy & Cracking Time Telemetry:** Calculates theoretical entropy in bits and estimates cracking time at an offline attack rate of **10 billion guesses/second (10 GH/s)**.
-- **CSPRNG Password Generator:** Integrated random password generator powered by `window.crypto.getRandomValues()` with customizable length and character sets.
-- **Demonstration Presets:** One-click sample buttons to quickly showcase short, compromised, sequence-based, medium, and high-entropy passwords during evaluations.
-- **Interactive Controls:** Show/Hide password toggle, single-click clear, and full analyzer reset.
-- **Educational Security Tips:** Best practices on Passphrases, Password Managers, Multi-Factor Authentication (MFA), and Credential Stuffing prevention.
+The **CyberShield Password Strength Analyzer** is a defensive cybersecurity tool designed to provide real-time, mathematically grounded password evaluation. Built under a strict **Zero-Trust, Zero-Knowledge Architecture**, the application conducts all evaluations directly inside the user's browser runtime. Cleartext credentials never cross network boundaries, are never written to disk or browser storage, and are never logged to developer consoles.
 
 ---
 
-## 🔒 Zero-Knowledge Privacy Architecture
+## 🎯 Project Objectives
 
-A core principle of cybersecurity is **Zero Trust**: **Never send a user's cleartext password across the internet.**
-
-This project strictly enforces:
-1. **100% Client-Side Execution:** All evaluations and algorithms run directly in the client's browser (V8 engine).
-2. **Zero Network Transmission:** No `POST`, `fetch`, or `XMLHttpRequest` calls transmit the password.
-3. **Zero Storage:** Passwords are never saved to `localStorage`, `sessionStorage`, `IndexedDB`, or `cookies`.
-4. **Zero Console Logging:** Developer tools console logging is strictly prohibited.
-5. **Memory Sanitization:** The memory and inputs are cleared on form reset and page unload.
+1. **Provide Real-Time Heuristic Password Strength Evaluation:** Implement dynamic, multi-factor credential auditing based on character diversity, length thresholds, pattern recognition, and breached password detection.
+2. **Compute Mathematical Shannon Information Entropy:** Calculate informational unpredictability in bits ($E = L \times \log_2(R)$) to demonstrate mathematical keyspace depth.
+3. **Simulate Adversarial Cracking Resilience:** Model theoretical brute-force cracking resistance across three attack models (Throttled Web App, Desktop CPU, and Modern GPU Rig at 10 GH/s).
+4. **Enforce Absolute Zero-Knowledge Privacy:** Guarantee that user credentials are never transmitted over HTTP/WebSocket, never stored in `localStorage`, `sessionStorage`, or cookies, and never output to telemetry.
+5. **Promote Defensive Security Hygiene:** Educate users on modern defensive practices aligned with **NIST SP 800-63B**, multi-word passphrases, Multi-Factor Authentication (MFA), and password managers.
+6. **Provide Cryptographically Secure Key Generation:** Integrate a CSPRNG generator backed by `window.crypto.getRandomValues()` for generating random credentials locally.
 
 ---
 
-## 🧮 Cybersecurity Methodology & Formulas
+## 🛠️ Technologies Used
 
-### 1. Shannon Information Entropy
-Password entropy measures the computational unpredictability of a credential:
+| Technology | Layer | Purpose |
+| :--- | :--- | :--- |
+| **HTML5** | Presentation / DOM | Semantic structure, accessible form controls, ARIA labeling, and responsive container layout. |
+| **CSS3** | Presentation / Styling | Cyberpunk dark navy theme (`#070b14`), glassmorphism, responsive grid/flexbox, custom properties, and animations. |
+| **JavaScript (ES6+)** | Core Engine | Zero-knowledge client-side evaluation, Shannon entropy computation, regular expressions, and CSPRNG generation. |
+| **Python (Flask & Standard Library)** | Backend Serving | Lightweight servers injecting OWASP-aligned HTTP security headers (CSP, X-Frame-Options, X-Content-Type-Options). |
+| **Node.js** | Quality Assurance | Automated test runner executing comprehensive audit scripts. |
+| **SVG (Scalable Vector Graphics)** | Visualization | Inline vector iconography and dynamic circular score gauge rendering. |
 
-$$E = L \times \log_2(R)$$
+---
 
-Where:
-- $L$ = Length of the password.
-- $R$ = Size of the character pool:
-  - Lowercase letters ($a-z$): $26$
-  - Uppercase letters ($A-Z$): $26$
-  - Numbers ($0-9$): $10$
-  - Special characters: $33$
+## ⚡ Features and Functionalities
 
-### 2. Brute-Force Cracking Time Estimate
-Cracking time assumes an attacker using an offline modern GPU cluster testing $10^{10}$ (10 Billion) hashes/sec:
+### 1. Interactive Credential Input & Controls
+- **Masked Input Field:** Monospace password field with real-time analysis triggered on typing.
+- **Show/Hide Visibility Toggle:** SVG eye / eye-slash button with dynamic `aria-label` and `title` synchronization.
+- **Single-Click Clear:** Instantly clears input text and resets character count.
+- **Full Form Reset:** Purges input and restores all gauges, checklist indicators, telemetry boxes, and alerts to default states.
 
-$$\text{Attempts} = \frac{R^L}{2}$$
+### 2. Multi-Factor Strength & Entropy Evaluation
+- **Dynamic Strength Meter:** Real-time progress bar transitioning smoothly between 5 tiers:
+  - *Very Weak* (`#ef4444`, Score $\le 25$)
+  - *Weak* (`#f97316`, Score $26\text{--}50$)
+  - *Medium* (`#f59e0b`, Score $51\text{--}74$)
+  - *Strong* (`#38bdf8`, Score $75\text{--}89$)
+  - *Very Strong* (`#10b981`, Score $90\text{--}100$)
+- **Circular SVG Score Gauge:** Numerical rating from 0 to 100 with stroke-dashoffset transition.
+- **Shannon Entropy Readout:** Calculates information entropy in bits ($E = L \times \log_2(R)$) adjusted for pattern penalties.
+- **Theoretical Cracking Projections:** Projects approximate brute-force time against an offline 10 GH/s GPU cluster.
+- **Comparative Attack Vectors Matrix:** Compares estimated resistance across:
+  - Web Application ($100\text{ guesses/sec}$)
+  - Desktop CPU ($50,000\text{ hashes/sec}$)
+  - High-Performance GPU Rig ($10,000,000,000\text{ hashes/sec}$)
 
-$$\text{Time (seconds)} = \frac{\text{Attempts}}{10^{10}}$$
+### 3. Seven-Point Security Criteria Checklist
+Real-time visual checklist updating with green checkmarks (`✔`) or red crosses (`✖`):
+1. **Minimum Length:** 8+ characters (with 12+ and 16+ bonus scaling).
+2. **Uppercase Letters:** Detects characters `A-Z`.
+3. **Lowercase Letters:** Detects characters `a-z`.
+4. **Numeric Digits:** Detects characters `0-9`.
+5. **Special Symbols:** Detects non-alphanumeric characters, symbols, and passphrase spaces (`/[^a-zA-Z0-9]/`).
+6. **Breached Wordlist Check:** Offline dictionary verification against 144+ compromised passwords, root words, and leetspeak mutations (`p@ssw0rd`).
+7. **Pattern & Sequence Detection:** Flags repeated characters (`aaa`, `121212`, `ababab`) and keyboard walks (`123456`, `qwerty`, `cba`).
 
-### 3. Pattern & Dictionary Penalties
-- **Common Passwords:** Exact and root-word matches against top breached wordlists (e.g. `password123`, `123456`, `admin`, `qwerty`) cap the score at $\le 15$ and trigger a critical security alert.
-- **Sequential Walks:** Sequences such as `1234`, `abc`, `qwerty` receive penalty deductions.
-- **Consecutive Repeats:** Identical consecutive characters (e.g. `aaa`, `111`) are detected and penalized.
+### 4. CSPRNG Password Generator
+- Generates cryptographically secure random credentials via `window.crypto.getRandomValues()`.
+- Configurable length slider (8 to 32 characters).
+- Independent character-set toggles (Uppercase, Lowercase, Numbers, Symbols) with guaranteed representation.
+- "Copy to Clipboard" with animated toast notification and "Test in Analyzer" integration.
+
+### 5. Sanitized Security Audit Report Export
+- Single-click download of a structured text audit report (`Security_Audit_Report_<timestamp>.txt`).
+- **Zero-Knowledge Sanitization:** Credentials are automatically masked (e.g. `T**********c`) so cleartext passwords are never exported to disk.
+- Includes full criteria breakdown, entropy calculation, attack matrix, and defensive recommendations.
+
+### 6. Interactive Slide Deck
+- Embedded 7-slide presentation deck ([presentation.html](file:///c:/Users/moham/OneDrive/Documents/Password-Strength-Analyzer/presentation.html)) for internship presentations and viva reviews.
 
 ---
 
@@ -98,151 +106,110 @@ $$\text{Time (seconds)} = \frac{\text{Attempts}}{10^{10}}$$
 ```text
 Password-Strength-Analyzer/
 │
-├── index.html                  # Main responsive web application with all sections
+├── index.html                  # Main responsive single-page web application
+├── presentation.html           # Interactive 7-slide presentation deck
+├── README.md                   # Technical overview and execution instructions
+├── PROJECT_REPORT.md           # Formal academic internship project report
+├── TEST_CASES.md               # Detailed test matrix and QA verification log
+├── requirements.txt            # Optional Python Flask dependencies
+├── app.py                      # Flask web server with OWASP security headers
+├── server.py                   # Python standard library HTTP server (zero install)
+├── .gitignore                  # Git exclusion rules for clean version control
 │
 ├── css/
-│   ├── style.css               # Dark navy cybersecurity theme, layout, and responsive rules
-│   └── animations.css          # Glow effects, pulses, and transitions
+│   ├── style.css               # Primary styling (Dark navy theme, CSS grid, glassmorphism)
+│   └── animations.css          # Keyframes for cyber pulses, glowing borders, and meters
 │
 ├── js/
-│   ├── common-passwords.js     # Breached passwords database and keyboard walk patterns
-│   └── script.js               # Core analysis engine, entropy math, and UI interactivity
+│   ├── common-passwords.js     # Breached credentials database, root words & keyboard patterns
+│   └── script.js               # Core analysis engine, entropy math, CSPRNG generator & DOM logic
 │
 ├── assets/
-│   └── favicon.svg             # Cybersecurity shield logo favicon
+│   └── favicon.svg             # Cybersecurity shield logo
 │
-├── python/                     # Optional Python hosting scripts
-│   ├── app.py                  # Flask application serving with OWASP security headers
-│   └── server.py               # Zero-dependency Python standard library server
-│
-├── app.py                      # Root shortcut to launch Flask server
-├── server.py                   # Root shortcut to launch standard Python server
-├── requirements.txt            # Optional dependencies (Flask)
-│
-├── test/
-│   └── test-analyzer.js        # Automated verification script testing all 6 mandatory cases
-│
-└── README.md                   # Full documentation and internship project report
+└── test/
+    ├── test-analyzer.js        # 6-factor automated verification script
+    └── comprehensive-audit.js  # 12-factor deep audit and 15 fictional passwords test runner
 ```
 
 ---
 
-## 🚀 How to Run Locally
+## 🚀 Installation and Execution Instructions
 
-### Method 1: Direct in Browser (Zero Setup)
-No installation or dependencies required:
-1. Navigate to the project folder:
+### Method 1: Direct Web Browser Execution (Zero Setup)
+Because the core application is implemented purely in client-side HTML5, CSS3, and JavaScript, it requires no runtime installation, build step, or server:
+1. Navigate to the project directory:
    ```bash
    cd Password-Strength-Analyzer
    ```
-2. Double-click `index.html` or open it with any web browser (Chrome, Edge, Firefox, Brave, Safari).
-3. The application is immediately fully functional!
+2. Double-click `index.html` or open it with any web browser (Google Chrome, Microsoft Edge, Mozilla Firefox, Brave, Safari).
+3. The application is immediately operational.
 
 ---
 
 ### Method 2: Python Standard Library Server
-Runs using Python's built-in standard library (no `pip` installs needed):
-1. In your terminal, run:
+Runs a local HTTP server using Python's built-in standard library (no `pip` dependencies required):
+1. In your terminal, execute:
    ```bash
    python server.py
    ```
-2. Open your browser and visit:
-   ```
+2. Open your browser and navigate to:
+   ```text
    http://127.0.0.1:8000
+   ```
+3. To view the presentation deck:
+   ```text
+   http://127.0.0.1:8000/presentation.html
    ```
 
 ---
 
-### Method 3: Python Flask Server
-Runs with Flask and applies hardened OWASP HTTP Security Headers:
-1. Install Flask:
+### Method 3: Python Flask Server (With OWASP Security Headers)
+Hosts the application with enterprise HTTP security headers (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options):
+1. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-2. Start the Flask application:
+2. Run the application:
    ```bash
    python app.py
    ```
-3. Open your browser and visit:
-   ```
+3. Access the application in your browser at:
+   ```text
    http://127.0.0.1:5000
    ```
 
 ---
 
-## 🧪 Automated Testing & Verification
+## 🧪 Automated Verification & Testing
 
-The project includes an automated test script (`test/test-analyzer.js`) that validates all required edge cases:
+The application includes two automated test suites built for Node.js:
 
-1. **Empty input:** Score 0, returns graceful awaiting state.
-2. **Short password:** Input `< 8` characters (e.g., `"cat"`), flagged as `Very Weak`.
-3. **Lowercase only:** Input with only `a-z` (e.g., `"supercalifragilistic"`), penalizes limited keyspace.
-4. **Uppercase and Lowercase:** Mixed-case input (e.g., `"CyberSecurityDefense"`), checks case diversity.
-5. **Numbers and Special Characters:** Full 4-class mix (e.g., `"Thiranex#2026!Sec"`), scores `Very Strong` with high entropy.
-6. **Commonly Guessed Password:** Breached password (e.g., `"password123"`), hard-capped at $\le 15$ with critical security warning.
+1. **Core Verification Suite:**
+   ```bash
+   node test/test-analyzer.js
+   ```
+   Validates 6 fundamental scenarios (Empty, Short, Lowercase, Mixed Case, Complex, Compromised).
 
-### Running the Test Suite:
-```bash
-node test/test-analyzer.js
-```
-
-### Test Suite Output:
-```text
-=================================================================
-  PASSWORD STRENGTH ANALYZER - AUTOMATED VERIFICATION SUITE
-  Thiranex Cyber Security Internship
-=================================================================
-
-[PASS] Test Case 1: Empty input
-       Input: ""
-       Detail: Passed: Handled empty state gracefully with 0 score.
-
-[PASS] Test Case 2: Short password ('cat')
-       Input: "cat"
-       Detail: Passed: Identified as short (3 chars), tier: Very Weak, score: 4
-
-[PASS] Test Case 3: Password containing only lowercase letters ('supercalifragilistic')
-       Input: "supercalifragilistic"
-       Detail: Passed: Verified lowercase-only constraint, penalized single-pool keyspace. Score: 40, Tier: Weak
-
-[PASS] Test Case 4: Password containing uppercase and lowercase letters ('CyberSecurityDefense')
-       Input: "CyberSecurityDefense"
-       Detail: Passed: Both case sets detected. Score: 35, Tier: Weak, Entropy: 104 bits
-
-[PASS] Test Case 5: Password containing numbers and special characters ('Thiranex#2026!Sec')
-       Input: "Thiranex#2026!Sec"
-       Detail: Passed: Full character diversity satisfied. Score: 100, Tier: Very Strong, Entropy: 112 bits
-
-[PASS] Test Case 6: Commonly guessed password ('password123')
-       Input: "password123"
-       Detail: Passed: Correctly flagged as compromised/breached word. Score: 15, Tier: Very Weak (Compromised)
-
------------------------------------------------------------------
-TEST SUMMARY: 6 / 6 Tests Passed Successfully.
------------------------------------------------------------------
-STATUS: ALL CYBERSECURITY ENGINE TEST CRITERIA VALIDATED! [OK]
-```
+2. **Comprehensive 12-Factor Security Audit:**
+   ```bash
+   node test/comprehensive-audit.js
+   ```
+   Executes 31 validation assertions across character classes, leetspeak normalization, pattern algorithms, boundary scoring, generator logic, zero-storage verification, and 15 distinct fictional test passwords.
 
 ---
 
-## 🛠️ Technologies Used
+## 📚 Cybersecurity References & Compliance
 
-| Technology | Purpose |
-| :--- | :--- |
-| **HTML5** | Semantic structure, accessible ARIA attributes, responsive layout. |
-| **CSS3** | Modern dark navy cyber UI, glassmorphism, flexbox/grid, CSS custom properties. |
-| **JavaScript (ES6+)** | Zero-knowledge client-side entropy calculation, regex analysis, CSPRNG generation. |
-| **Python (Standard Library & Flask)** | Hardened HTTP web server, OWASP security headers injection. |
-| **SVG** | Vector graphics, responsive gauges, and crisp cybersecurity iconography. |
+- **NIST Special Publication 800-63B:** *Digital Identity Guidelines — Authentication and Lifecycle Management*. National Institute of Standards and Technology.
+- **OWASP Application Security Verification Standard (ASVS):** Authentication Verification Requirements (v4.0).
+- **OWASP Authentication Cheat Sheet:** Guidance on password complexity, storage, and dictionary validation.
+- **CISA:** *Cyber Hygiene Guidelines — Securing Passwords and Multi-Factor Authentication*.
+- **Shannon, C. E. (1948):** *A Mathematical Theory of Communication*. Bell System Technical Journal, 27(3), 379–423.
 
 ---
 
-## 🎓 Internship Project Attribution
-
-- **Project:** Password Strength Analyzer
-- **Internship Program:** Cyber Security Internship
-- **Organization:** Thiranex
-- **Domain:** Application Security & Defensive Engineering
-
-*Developed with a commitment to zero-trust privacy, credential hygiene, and user education.*
-
+**Internship Project Attribution:**  
+- **Project Name:** CyberShield Password Strength Analyzer  
+- **Internship:** Thiranex Cyber Security Internship  
+- **Author:** Mohamed Luqman  
