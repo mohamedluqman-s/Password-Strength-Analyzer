@@ -1,0 +1,10 @@
+# Password Strength Analyzer - Optional Dependencies
+# Thiranex Cyber Security Internship Project
+#
+# Note: The application is 100% functional running directly in any web browser
+# (or with standard python via `python server.py`).
+# If you prefer running via Flask, install this file:
+# pip install -r requirements.txt
+
+Flask>=3.0.0
+

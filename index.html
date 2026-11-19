@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Password Strength Analyzer - A zero-knowledge cybersecurity tool to evaluate password resilience, Shannon entropy, and brute-force cracking resistance. Built for Thiranex Cyber Security Internship.">
+    <meta name="theme-color" content="#070b14">
+    <title>Password Strength Analyzer | Thiranex Cyber Security Internship</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+    <!-- ====================================================================
+         NAVIGATION BAR
+         ==================================================================== -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="#home" class="brand-logo" aria-label="Password Strength Analyzer Home">
+                <svg class="brand-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <rect x="9" y="11" width="6" height="5" rx="1"/>
+                    <path d="M10 11V9a2 2 0 0 1 4 0v2"/>
+                </svg>
+                <span>Cyber<span class="accent">Shield</span> Analyzer</span>
+            </a>
+
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#analyzer">Analyzer</a></li>
+                    <li><a href="#generator">Generator</a></li>
+                    <li><a href="#tips">Security Tips</a></li>
+                    <li><a href="#about">About Project</a></li>
+                </ul>
+            </nav>
+
+            <div class="internship-badge" title="Developed for Thiranex Cyber Security Internship">
+                <span>Thiranex Cyber Security</span>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+                &#9776;
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- ================================================================
+             HERO / HOME SECTION
+             ================================================================ -->
+        <section id="home" class="hero-section">
+            <div class="container">
+                <div class="hero-pill">
+                    <span class="hero-pill-dot"></span>
+                    <span>Zero-Knowledge Client-Side Cryptographic Audit</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Evaluate Credential Resilience with <span class="gradient-text">Zero Compromise</span>
+                </h1>
+
+                <p class="hero-description">
+                    Analyze password strength against mathematical entropy standards, dictionary attack databases, and brute-force heuristics. Evaluated 100% locally in your browser.
+                </p>
+
+                <div class="hero-cta-group">
+                    <a href="#analyzer" class="btn btn-primary">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        Launch Analyzer
+                    </a>
+                    <a href="#generator" class="btn btn-outline">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Generate Secure Password
+                    </a>
+                </div>
+
+                <div class="privacy-guarantee-banner">
+                    <svg class="privacy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                    <span><strong>Zero-Storage Guarantee:</strong> Passwords are never sent to a server, never stored in cookies or storage, and never logged in the console.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             PASSWORD ANALYZER SECTION (DASHBOARD)
+             ================================================================ -->
+        <section id="analyzer" class="analyzer-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Security Audit Suite</span>
+                    <h2 class="section-title">Password Strength Analyzer</h2>
+                    <p class="section-subtitle">Real-time heuristic evaluation across 6 core cybersecurity criteria</p>
+                </div>
+
+                <!-- Dashboard Main Grid -->
+                <div class="dashboard-grid">
+
+                    <!-- Left Column: Password Input & Meter -->
+                    <div class="cyber-card">
+                        <div class="card-header-flex">
+                            <h3 class="card-title">
+                                <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                                Password Credential Input
+                            </h3>
+                            <span class="char-counter" id="charCountValue">0 chars</span>
+                        </div>
+
+                        <!-- Input Field with Left Lock & Right Controls -->
+                        <div class="password-input-wrapper">
+                            <svg class="input-icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 2l-2 2m-1.5 1.5L16 7m-1.5 1.5L13 10m-1.5 1.5L10 13m-1.5 1.5L7 16m-1.5 1.5L4 19"/>
+                                <circle cx="7.5" cy="7.5" r="5.5"/>
+                            </svg>
+
+                            <input 
+                                type="password" 
+                                id="passwordInput" 
+                                class="password-field" 
+                                placeholder="Enter password to test security resilience..."
+                                autocomplete="new-password"
+                                autocapitalize="off"
+                                spellcheck="false"
+                                aria-label="Password input field"
+                            >
+
+                            <div class="input-actions-right">
+                                <!-- Show/Hide Toggle Button -->
+                                <button type="button" class="icon-btn" id="toggleVisibilityBtn" title="Show/Hide Password" aria-label="Show password">
+                                    <svg class="icon-svg" id="toggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Clear Input Button -->
+                                <button type="button" class="icon-btn" id="clearBtn" title="Clear Password" aria-label="Clear input">
+                                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Input Toolbar: Analyze & Reset -->
+                        <div class="input-button-toolbar">
+                            <button type="button" class="btn btn-primary" id="analyzeBtn">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                                Analyze Password
+                            </button>
+
+                            <button type="button" class="btn btn-secondary" id="resetBtn">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                                    <path d="M21 3v5h-5"/>
+                                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                                    <path d="M8 16H3v5"/>
+                                </svg>
+                                Reset Analysis
+                            </button>
+                        </div>
+
+                        <!-- Dynamic Strength Meter -->
+                        <div class="meter-wrapper">
+                            <div class="meter-header">
+                                <span class="meter-label">Dynamic Strength Meter</span>
+                                <span class="strength-badge empty" id="strengthBadge">Awaiting Input</span>
+                            </div>
+                            <div class="meter-track">
+                                <div class="meter-fill empty" id="strengthMeterBar"></div>
+                            </div>
+                        </div>
+
+                        <!-- Breached/Pattern Alert Banner (Hidden by default) -->
+                        <div class="alert-banner hidden" id="alertBanner">
+                            <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <span id="alertMessage">Security Notice: Vulnerability detected.</span>
+                        </div>
+
+                        <!-- Quick Test Presets for Demonstration -->
+                        <div class="quick-tests">
+                            <div class="quick-tests-title">Demonstration Presets (Click to Test):</div>
+                            <div class="quick-test-pills">
+                                <button type="button" class="quick-test-btn" data-sample="cat">Short ("cat")</button>
+                                <button type="button" class="quick-test-btn" data-sample="password123">Common Breached</button>
+                                <button type="button" class="quick-test-btn" data-sample="qwertyuiop">Keyboard Walk</button>
+                                <button type="button" class="quick-test-btn" data-sample="CyberSec2024">Medium Mix</button>
+                                <button type="button" class="quick-test-btn" data-sample="Tr0ub4dor&3#X9!">Strong Entropy</button>
+                                <button type="button" class="quick-test-btn" data-sample="correct-horse-battery-staple">Passphrase</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Visual Score Gauge & Telemetry -->
+                    <div class="cyber-card score-card-layout">
+                        <h3 class="card-title">
+                            <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                            Security Score Gauge
+                        </h3>
+
+                        <!-- Circular SVG Progress Gauge -->
+                        <div class="gauge-container">
+                            <svg class="gauge-svg" viewBox="0 0 120 120">
+                                <circle class="gauge-bg" cx="60" cy="60" r="52"></circle>
+                                <circle class="gauge-fill" id="scoreCircle" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+                            </svg>
+                            <div class="gauge-center-content">
+                                <div class="score-display" id="scoreNumber">0</div>
+                                <div class="score-total">/ 100 PTS</div>
+                            </div>
+                        </div>
+
+                        <div class="score-disclaimer">
+                            <strong>Notice:</strong> This score is an educational estimate based on mathematical entropy and dictionary rules, not an absolute guarantee of security.
+                        </div>
+
+                        <!-- Telemetry Grid: Crack Time & Entropy -->
+                        <div class="metrics-row">
+                            <div class="metric-box">
+                                <div class="metric-label">Shannon Entropy</div>
+                                <div class="metric-value" id="entropyValue">0 bits</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-label">Est. Crack Time (10 GH/s)</div>
+                                <div class="metric-value" id="crackTimeValue">0 seconds</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Checklist & Suggestions Grid -->
+                <div class="checklist-grid">
+
+                    <!-- Security Checklist -->
+                    <div class="cyber-card">
+                        <div class="card-header-flex">
+                            <h3 class="card-title">
+                                <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 11 12 14 22 4"/>
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                                </svg>
+                                Security Criteria Checklist
+                            </h3>
+                        </div>
+
+                        <ul class="checklist-items">
+                            <li class="checklist-item" id="check-length">
+                                <div class="check-label-group">
+                                    <span class="check-icon">&#9675;</span>
+                                    <span>Minimum 8 Characters (12+ Recommended)</span>
+                                </div>
+                                <span class="check-status">Pending</span>
+                            </li>
+                            <li class="checklist-item" id="check-upper">
+                                <div class="check-label-group">
+                                    <span class="check-icon">&#9675;</span>
+                                    <span>Uppercase Letters (A-Z)</span>
+                                </div>
+                                <span class="check-status">Pending</span>
+                            </li>
+                            <li class="checklist-item" id="check-lower">
+                                <div class="check-label-group">
+                                    <span class="check-icon">&#9675;</span>
+                                    <span>Lowercase Letters (a-z)</span>
+                                </div>
+                                <span class="check-status">Pending</span>
+                            </li>
+                            <li class="checklist-item" id="check-number">
+                                <div class="check-label-group">
+                                    <span class="check-icon">&#9675;</span>
+                                    <span>Numeric Digits (0-9)</span>
+                                </div>
+                                <span class="check-status">Pending</span>
+                            </li>
+                            <li class="checklist-item" id="check-special">
+                                <div class="check-label-group">
+                                    <span class="check-icon">&#9675;</span>
+                                    <span>Special Symbols (!@#$%^&*...)</span>
+                                </div>
+                                <span class="check-status">Pending</span>
+                            </li>
+                            <li class="checklist-item" id="check-common">
+                                <div class="check-label-group">
+                                    <span class="check-icon">&#9675;</span>
+                                    <span>Not in Common / Breached Lists</span>
+                                </div>
+                                <span class="check-status">Pending</span>
+                            </li>
+                            <li class="checklist-item" id="check-patterns">
+                                <div class="check-label-group">
+                                    <span class="check-icon">&#9675;</span>
+                                    <span>No Predictable Sequences / Repeats</span>
+                                </div>
+                                <span class="check-status">Pending</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Improvement Suggestions -->
+                    <div class="cyber-card">
+                        <div class="card-header-flex">
+                            <h3 class="card-title">
+                                <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                                </svg>
+                                Password Improvement Suggestions
+                            </h3>
+                        </div>
+
+                        <ul class="suggestions-list" id="suggestionsList">
+                            <!-- Populated dynamically by JavaScript -->
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================================================================
+             PASSWORD GENERATOR SECTION
+             ================================================================ -->
+        <section id="generator" class="generator-section">
+            <div class="container">
+                <div class="generator-card">
+                    <div class="section-header" style="margin-bottom: 1.5rem;">
+                        <span class="section-tag">Cryptographic Defense Tool</span>
+                        <h2 class="section-title">CSPRNG Password Generator</h2>
+                        <p class="section-subtitle">Generate cryptographically secure random passwords backed by <code>window.crypto.getRandomValues()</code></p>
+                    </div>
+
+                    <div class="generator-controls-grid">
+                        <!-- Configuration Controls -->
+                        <div class="gen-config">
+                            <div class="gen-slider-group">
+                                <div class="gen-slider-header">
+                                    <span>Password Length:</span>
+                                    <strong id="genLengthDisplay" style="color: var(--cyan-primary);">16</strong>
+                                </div>
+                                <input type="range" id="genLengthSlider" class="gen-slider" min="8" max="32" value="16">
+                            </div>
+
+                            <div class="gen-checkboxes">
+                                <label class="gen-checkbox-label">
+                                    <input type="checkbox" id="genUpperCheck" checked>
+                                    <span>Uppercase (A-Z)</span>
+                                </label>
+                                <label class="gen-checkbox-label">
+                                    <input type="checkbox" id="genLowerCheck" checked>
+                                    <span>Lowercase (a-z)</span>
+                                </label>
+                                <label class="gen-checkbox-label">
+                                    <input type="checkbox" id="genNumbersCheck" checked>
+                                    <span>Numbers (0-9)</span>
+                                </label>
+                                <label class="gen-checkbox-label">
+                                    <input type="checkbox" id="genSymbolsCheck" checked>
+                                    <span>Special Symbols (!@#$)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Output & Actions -->
+                        <div class="gen-output-box">
+                            <div class="gen-output-field-wrap">
+                                <input 
+                                    type="text" 
+                                    id="generatedPasswordInput" 
+                                    class="gen-output-field" 
+                                    readonly 
+                                    placeholder="Click 'Generate Password'..."
+                                    aria-label="Generated password output"
+                                >
+                                <button type="button" class="icon-btn gen-copy-btn" id="copyGeneratedBtn" title="Copy to clipboard" aria-label="Copy generated password">
+                                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="gen-actions">
+                                <button type="button" class="btn btn-primary" id="generateBtn" style="flex: 1;">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                                    </svg>
+                                    Generate Password
+                                </button>
+                                <button type="button" class="btn btn-outline" id="applyGeneratedBtn" style="flex: 1;">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    Test in Analyzer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             SECURITY TIPS SECTION
+             ================================================================ -->
+        <section id="tips" class="tips-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Cyber Defense Best Practices</span>
+                    <h2 class="section-title">Password Security & Hygiene</h2>
+                    <p class="section-subtitle">Core principles recommended by cybersecurity standards (NIST SP 800-63B, OWASP, and CISA)</p>
+                </div>
+
+                <div class="tips-grid">
+                    <!-- Tip 1 -->
+                    <div class="tip-card">
+                        <div class="tip-icon-wrap">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">Adopt Multi-Word Passphrases</h3>
+                        <p class="tip-desc">
+                            Length provides exponential defense against brute-force attacks compared to complex short words. Passphrases composed of 4 or 5 randomly chosen words (e.g. <code>correct-horse-battery-staple</code>) are easy to remember yet astronomically difficult to crack.
+                        </p>
+                    </div>
+
+                    <!-- Tip 2 -->
+                    <div class="tip-card">
+                        <div class="tip-icon-wrap">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">Use a Trusted Password Manager</h3>
+                        <p class="tip-desc">
+                            Humans cannot safely remember dozens of unique, 16+ character high-entropy passwords. Modern password managers (such as Bitwarden, 1Password, or KeePass) store credentials inside AES-256 encrypted vaults.
+                        </p>
+                    </div>
+
+                    <!-- Tip 3 -->
+                    <div class="tip-card">
+                        <div class="tip-icon-wrap">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">Enforce Multi-Factor Authentication (MFA)</h3>
+                        <p class="tip-desc">
+                            Even if a password is compromised in a breach or phishing campaign, Hardware Security Keys (FIDO2 / WebAuthn) and Authenticator apps (TOTP) stop 99.9% of automated account takeover attempts.
+                        </p>
+                    </div>
+
+                    <!-- Tip 4 -->
+                    <div class="tip-card">
+                        <div class="tip-icon-wrap">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">Eliminate Password Reuse</h3>
+                        <p class="tip-desc">
+                            Credential Stuffing is an automated attack where cybercriminals take billions of username/password pairs leaked from one breached site and test them across banking, email, and social networks. Never reuse passwords across sites.
+                        </p>
+                    </div>
+
+                    <!-- Tip 5 -->
+                    <div class="tip-card">
+                        <div class="tip-icon-wrap">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">Avoid Predictable Leetspeak</h3>
+                        <p class="tip-desc">
+                            Replacing 'e' with '3' or 'a' with '@' (e.g. <code>P@ssw0rd1!</code>) no longer deceives modern attack software. Modern password cracking tools (like Hashcat and John the Ripper) automatically evaluate leetspeak permutation rules in microseconds.
+                        </p>
+                    </div>
+
+                    <!-- Tip 6 -->
+                    <div class="tip-card">
+                        <div class="tip-icon-wrap">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 18h20"/>
+                                <path d="M2 6h20"/>
+                                <path d="M7 10h10"/>
+                                <path d="M7 14h10"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">Zero-Trust Local Audit Architecture</h3>
+                        <p class="tip-desc">
+                            Never test actual high-value corporate master passwords on random online websites. This application is architected with a strict zero-trust model: all checks execute inside your browser's V8 engine with zero network connectivity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             ABOUT PROJECT SECTION
+             ================================================================ -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="about-card">
+                    <div class="about-grid">
+                        <div class="about-text">
+                            <span class="section-tag">Internship Capstone Project</span>
+                            <h2 class="section-title">About Password Strength Analyzer</h2>
+                            <p>
+                                The <strong>Password Strength Analyzer</strong> is an advanced, privacy-first cybersecurity utility designed and developed as part of the <strong>Cyber Security Internship at Thiranex</strong>.
+                            </p>
+                            <p>
+                                Unlike naive password checkers that only look at character lengths, this application implements full cryptographic entropy estimation (Shannon Entropy), dictionary pattern matching against known breaches, consecutive sequence analysis, and real-world GPU cluster cracking time projections.
+                            </p>
+
+                            <ul class="about-features-list">
+                                <li class="about-feature-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    100% Client-Side Privacy
+                                </li>
+                                <li class="about-feature-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Shannon Entropy Calculations
+                                </li>
+                                <li class="about-feature-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Breach Dictionary Detection
+                                </li>
+                                <li class="about-feature-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    CSPRNG Key Generation
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Internship Info Box -->
+                        <div class="internship-info-card">
+                            <h4>Project Credential Details</h4>
+                            <div class="internship-detail-row">
+                                <span class="internship-label">Program:</span>
+                                <span class="internship-val">Cyber Security Internship</span>
+                            </div>
+                            <div class="internship-detail-row">
+                                <span class="internship-label">Organization:</span>
+                                <span class="internship-val">Thiranex</span>
+                            </div>
+                            <div class="internship-detail-row">
+                                <span class="internship-label">Project:</span>
+                                <span class="internship-val">Password Strength Analyzer</span>
+                            </div>
+                            <div class="internship-detail-row">
+                                <span class="internship-label">Stack:</span>
+                                <span class="internship-val">HTML5, CSS3, JavaScript, Python</span>
+                            </div>
+                            <div class="internship-detail-row">
+                                <span class="internship-label">Privacy Model:</span>
+                                <span class="internship-val">Zero-Knowledge / No Storage</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER
+         ==================================================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Password Strength Analyzer</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 0.75rem;">
+                        An educational cybersecurity dashboard demonstrating credential entropy evaluation, defensive design, and zero-knowledge client-side architecture.
+                    </p>
+                    <p style="font-size: 0.82rem; color: var(--text-muted);">
+                        Developed for the <strong>Thiranex Cyber Security Internship</strong>.
+                    </p>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#analyzer">Analyzer</a></li>
+                        <li><a href="#generator">Password Generator</a></li>
+                        <li><a href="#tips">Security Tips</a></li>
+                        <li><a href="#about">About Project</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-col">
+                    <h4>Security Standards</h4>
+                    <ul>
+                        <li><a href="https://pages.nist.gov/800-63-3/sp800-63b.html" target="_blank" rel="noopener noreferrer">NIST SP 800-63B</a></li>
+                        <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Auth Guidelines</a></li>
+                        <li><a href="https://www.cisa.gov/secure-our-world" target="_blank" rel="noopener noreferrer">CISA Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>
+                    &copy; 2026 Password Strength Analyzer. All rights reserved.
+                </div>
+                <div>
+                    Internship Project Credit: <span class="credit-badge">Thiranex Cyber Security Internship</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="toast-notification" role="status" aria-live="polite">
+        Action completed.
+    </div>
+
+    <!-- Scripts: Common Passwords Database first, then Main Core Engine -->
+    <script src="js/common-passwords.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+
